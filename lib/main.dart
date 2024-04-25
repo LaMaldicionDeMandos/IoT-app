@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:iot_app/components/Link.dart';
 import 'package:iot_app/components/PasswordTextField.dart';
 
 void main() {
@@ -13,9 +16,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'IoT Project',
       theme: ThemeData(
-        textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: Colors.pink
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.pink,
+          backgroundColor: Colors.white
         ),
+
+        primaryColor: Colors.pink,
+        textSelectionTheme: const TextSelectionThemeData(
+         cursorColor: Colors.pink
+        ),
+
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: const Color(0xfff1f1f1),
@@ -28,7 +38,7 @@ class MyApp extends StatelessWidget {
           )
         ),
         fontFamily: 'Lato',
-         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Hola! 👋'),
@@ -60,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(padding: EdgeInsets.symmetric(horizontal: 32, vertical: 56),
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 56),
               child: Text(widget.title, style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
             ),
             const Padding(padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
@@ -71,7 +81,13 @@ class _MyHomePageState extends State<MyHomePage> {
               )
             ),
             const Padding(padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                child: PasswordTextField()
+              child: PasswordTextField()
+            ),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 32),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Link(label: 'Recuperar contraseña')
+              )
             )
           ],
         ),
