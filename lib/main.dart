@@ -122,6 +122,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     )
                 )
             ),
+            const Padding(padding: EdgeInsets.fromLTRB(32, 32, 32, 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('¿No tienes una cuenta?',
+                        style: TextStyle(fontSize: 14, color: Colors.black87)),
+                    Link(label: 'Registrate')
+                  ],
+                )
+            ),
           ],
         ),
       ),
