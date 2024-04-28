@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iot_app/components/Link.dart';
 import 'package:iot_app/components/PasswordTextField.dart';
 import 'package:iot_app/components/PrimaryButton.dart';
+import 'package:iot_app/services/AuthService.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,6 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  AuthService authService = AuthService(baseUrl: 'https://api.example.com');
 
   @override
   void dispose() {
@@ -59,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: PrimaryButton(label: 'Login', onPressed: () {
                   String username = usernameController.value.text;
                   String password = passwordController.value.text;
+                  authService.login({username: username, password: password});
                   print(username + " - " + password);
                 },)
             ),
