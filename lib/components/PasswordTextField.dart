@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class PasswordTextField extends StatefulWidget {
-  const PasswordTextField({super.key});
+  final TextEditingController controller;
+
+  const PasswordTextField({super.key, required this.controller});
 
   @override
   State<StatefulWidget> createState() => _PasswordTextFieldState();
@@ -40,7 +42,8 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
                   child: IconButton(onPressed: () => {}, icon: Icon(eyeIcon)),
                 )
             )
-        )
+        ),
+      controller: widget.controller,
     );
   }
 }
