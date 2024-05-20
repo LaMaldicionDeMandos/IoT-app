@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final String baseUrl = dotenv.env['SERVER_URL']!;
@@ -13,11 +14,10 @@ class AuthService {
       'username': username,
       'password': password
     }));
-    if (response.statusCode == 201) {
-      print(response.body);
+    if (response.statusCode == 200) {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.setString('accessToken', response.body);
     } else {
-      print(response.statusCode);
-      print(response.body);
       throw Exception('Failed login.');
     }
   }
