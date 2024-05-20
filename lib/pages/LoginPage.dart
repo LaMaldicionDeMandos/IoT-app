@@ -16,7 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  AuthService authService = AuthService(baseUrl: 'https://api.example.com');
+  AuthService authService = AuthService();
 
   @override
   void dispose() {
@@ -61,8 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: PrimaryButton(label: 'Login', onPressed: () {
                   String username = usernameController.value.text;
                   String password = passwordController.value.text;
-                  authService.login({username: username, password: password});
-                  print(username + " - " + password);
+                  authService.login(username, password);
                 },)
             ),
             const Padding(padding: EdgeInsets.symmetric(horizontal: 32),
