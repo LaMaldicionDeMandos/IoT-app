@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  final String _username = '';
-
-  void _setUsername() {
-    setState(() {
-    });
-  }
+class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +17,7 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(padding: EdgeInsets.symmetric(horizontal: 32, vertical: 56),
-              child: Text('Empesemos con el registro 👇', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
+              child: Text('Empesemos 👇', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
             ),
           ],
         ),

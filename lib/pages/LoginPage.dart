@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iot_app/components/ErrorText.dart';
 
 import 'package:iot_app/components/Link.dart';
 import 'package:iot_app/components/PasswordTextField.dart';
@@ -17,17 +19,20 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   AuthService authService = AuthService();
+  bool hasError = false;
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
     usernameController.dispose();
     passwordController.dispose();
 
-    String username;
-    String password;
-
     super.dispose();
+  }
+
+  void _setError(bool e) {
+    setState(() {
+      hasError = e;
+    });
   }
 
   @override
@@ -48,6 +53,10 @@ class _LoginPageState extends State<LoginPage> {
                     controller: usernameController,
                 )
             ),
+            if (hasError) const Row(
+                children: <Widget>[
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 40),
+                      child: ErrorText("* No hemos encontrado el email."))]),
             Padding(padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                 child: PasswordTextField(controller: passwordController)
             ),
@@ -59,9 +68,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Padding(padding: const EdgeInsets.fromLTRB(32, 56, 32, 8),
                 child: PrimaryButton(label: 'Login', onPressed: () {
+                  _setError(false);
                   String username = usernameController.value.text;
                   String password = passwordController.value.text;
-                  authService.login(username, password);
+                  authService.login(username, password)
+                  .then((value) => Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false,))
+                      .catchError((onError) => {_setError(true)});
                 },)
             ),
             const Padding(padding: EdgeInsets.symmetric(horizontal: 32),
@@ -91,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                     )
                 )
             ),
-            Padding(padding: EdgeInsets.fromLTRB(32, 32, 32, 8),
+            Padding(padding: const EdgeInsets.fromLTRB(32, 32, 32, 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

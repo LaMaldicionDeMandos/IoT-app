@@ -1,9 +1,9 @@
-import 'dart:ui';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:iot_app/pages/MainPage.dart';
 import 'package:iot_app/pages/LoginPage.dart';
 import 'package:iot_app/pages/RegisterPage.dart';
 
@@ -11,7 +11,7 @@ String initScreen = '/login';
 void main() async {
   await dotenv.load(fileName: ".env");
   final preferences = await SharedPreferences.getInstance();
-  initScreen = preferences.containsKey('accessToken') ? '/register' : '/login';
+  initScreen = preferences.containsKey('accessToken') ? '/' : '/login';
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: initScreen,
       routes: <String, WidgetBuilder> {
+        '/': (BuildContext context) => const MainPage(),
         '/login': (BuildContext context) => const LoginPage(),
         '/register': (BuildContext context) => const RegisterPage()
       },
