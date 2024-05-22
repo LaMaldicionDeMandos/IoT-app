@@ -17,7 +17,7 @@ class _MainPageState extends State<MainPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(padding: EdgeInsets.symmetric(horizontal: 32, vertical: 56),
-              child: Text('Empesemos 👇', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
+              child: Text('Empecemos 👇', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
             ),
           ],
         ),

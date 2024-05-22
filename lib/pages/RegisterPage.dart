@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iot_app/components/MyAppBar.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -17,16 +18,21 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      appBar: MyAppBar.build(context),
+      body: const Column(
           children: <Widget>[
-            Padding(padding: EdgeInsets.symmetric(horizontal: 32, vertical: 56),
-              child: Text('Empesemos con el registro 👇', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 32, vertical: 56),
+                    child: Text('Empecemos 👇', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
