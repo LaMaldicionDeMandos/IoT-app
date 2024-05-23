@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthService {
   final String baseUrl = dotenv.env['SERVER_URL']!;
   final String loginPath = '/auth/login';
+  final String registerPath = '/auth/register';
 
   Future<dynamic> login(username, password) async {
     final response = await http.post(Uri.parse(baseUrl + loginPath),
@@ -18,6 +19,21 @@ class AuthService {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString('accessToken', response.body);
     } else {
+      throw Exception('Failed login.');
+    }
+  }
+
+  Future<dynamic> register(name, username, password) async {
+    final response = await http.post(Uri.parse(baseUrl + registerPath),
+        headers: <String, String> {'Content-Type': 'application/json'},
+        body: jsonEncode(<String, Object>{
+          'profile': <String, String>{
+            'first_name': name
+          },
+          'username': username,
+          'password': password
+        }));
+    if (response.statusCode != 201) {
       throw Exception('Failed login.');
     }
   }

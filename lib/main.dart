@@ -1,6 +1,7 @@
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
+import 'package:iot_app/pages/VerificationCodePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:iot_app/pages/MainPage.dart';
@@ -53,7 +54,8 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder> {
         '/': (BuildContext context) => const MainPage(),
         '/login': (BuildContext context) => const LoginPage(),
-        '/register': (BuildContext context) => const RegisterPage()
+        '/register': (BuildContext context) => const RegisterPage(),
+        '/register/code': (BuildContext context) => const VerificationCodePage()
       },
     );
   }
