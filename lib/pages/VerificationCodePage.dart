@@ -18,7 +18,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Padding(padding: EdgeInsets.fromLTRB(32, 0, 32, 0),
-              child: Text('Ingresa el codigo de verificación 🔒', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
+              child: Text('Ingresa el código de verificación 🔒', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
             ),
             const Padding(padding: EdgeInsets.symmetric(horizontal: 32),
                 child: Text('Se ha enviado un código de verificación de 6 dígitos a tu dirección de correo electrónico.',
