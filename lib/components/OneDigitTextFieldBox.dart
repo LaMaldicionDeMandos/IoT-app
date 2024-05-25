@@ -1,49 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class PasswordTextField extends StatefulWidget {
+class OneDigitTextFieldBox extends StatefulWidget {
   final TextEditingController controller;
+  final FocusNode focusNode;
 
-  const PasswordTextField({super.key, required this.controller});
+  const OneDigitTextFieldBox({super.key, required this.controller, required this.focusNode});
 
   @override
-  State<StatefulWidget> createState() => _PasswordTextFieldState();
+  State<StatefulWidget> createState() => _OneDigitTextFieldBoxState();
 }
 
-class _PasswordTextFieldState extends State<PasswordTextField> {
-  bool visiblePassword = false;
-  IconData eyeIcon = Icons.visibility;
-
-  void update() {
-    eyeIcon = visiblePassword ? Icons.visibility_off : Icons.visibility;
-  }
-
-  void _setVisible(bool visible) {
-    setState(() {
-      visiblePassword = visible;
-      update();
-    });
-  }
+class _OneDigitTextFieldBoxState extends State<OneDigitTextFieldBox> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-        obscureText: !visiblePassword,
-        style: const TextStyle(fontFamily: 'Roboto'),
-        decoration: InputDecoration(
-            hintText: 'Password',
-            suffixIcon: Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: GestureDetector(
-                  onTapDown: (details) => setState(() {
-                    _setVisible(true);
-                  }),
-                  onTapCancel: () => setState(() {
-                    _setVisible(false);
-                  }),
-                  child: IconButton(onPressed: () => {}, icon: Icon(eyeIcon)),
-                )
-            )
-        ),
-      controller: widget.controller,
-    );
+    return Expanded(
+        child: Padding(padding: const EdgeInsets.symmetric(horizontal: 2),
+          child:TextField(
+          focusNode: widget.focusNode,
+          controller: widget.controller,
+          style: const TextStyle(fontFamily: 'Roboto', fontSize: 20),
+          decoration: const InputDecoration(),
+          keyboardType: const TextInputType.numberWithOptions(),
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly, // Permite solo dígitos
+            LengthLimitingTextInputFormatter(1), // Limita a un solo carácter
+          ],
+        )));
   }
 }
