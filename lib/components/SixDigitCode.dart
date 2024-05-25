@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:iot_app/components/OneDigitTextFieldBox.dart';
 
 class SixDigitCode extends StatefulWidget {
+  static void defaultListener(String a) {
 
-  const SixDigitCode({super.key});
+  }
+  final Function(String) listener;
+  const SixDigitCode({super.key, this.listener = defaultListener});
 
   @override
   State<StatefulWidget> createState() => _SixDigitCodeState();
@@ -33,8 +36,6 @@ class _SixDigitCodeState extends State<SixDigitCode> {
   @override
   void initState() {
     super.initState();
-    // Añadir listener al controlador
-    //_controller.addListener(_onTextChanged);
     for (int i = 0; i < 6; i++) {
       var listener = curry(control)(i);
       controllers[i].addListener(listener);
@@ -63,7 +64,9 @@ class _SixDigitCodeState extends State<SixDigitCode> {
         if (index > 0) FocusScope.of(context).requestFocus(focuses[index - 1]);
       }
 
-      if (completeDigits()) print("Completado!!!!");
+      if (completeDigits()) {
+        widget.listener(digits.reduce((value, digit) => value + digit));
+      }
     });
   }
 

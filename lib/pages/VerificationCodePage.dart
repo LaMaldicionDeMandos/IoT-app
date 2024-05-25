@@ -14,19 +14,19 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(padding: EdgeInsets.fromLTRB(32, 0, 32, 0),
+            const Padding(padding: EdgeInsets.fromLTRB(32, 0, 32, 0),
               child: Text('Ingresa el código de verificación 🔒', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
             ),
-            Padding(padding: EdgeInsets.symmetric(horizontal: 32),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 32),
                 child: Text('Se ha enviado un código de verificación de 6 dígitos a tu dirección de correo electrónico.',
                     style: TextStyle(fontSize: 14, color: Colors.black54))
             ),
-            Padding(padding: EdgeInsets.symmetric(horizontal: 16, vertical: 48),
-              child: SixDigitCode(),
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
+              child: SixDigitCode(listener: (value) => print(value)),
             ),
           ]
         ),
