@@ -81,7 +81,15 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(fontSize: 14, color: Colors.black54))
             ),
             Padding(padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                child: ElevatedButton.icon(onPressed: () {  },
+                child: ElevatedButton.icon(
+                    onPressed: () {
+                      authService.googleLogin()
+                          .then((value) => {
+                            print("Volvio $value")
+                            //Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false,)
+                          })
+                          .catchError((onError) => { print("Error $onError")/*_setError(true)*/});
+                    },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),

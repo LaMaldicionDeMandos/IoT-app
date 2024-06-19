@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:iot_app/pages/VerificationCodePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 import 'package:iot_app/pages/MainPage.dart';
 import 'package:iot_app/pages/LoginPage.dart';
 import 'package:iot_app/pages/RegisterPage.dart';
@@ -14,6 +17,9 @@ void main() async {
   final preferences = await SharedPreferences.getInstance();
   initScreen = preferences.containsKey('accessToken') ? '/' : '/login';
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
