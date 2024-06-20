@@ -9,6 +9,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final String baseUrl = dotenv.env['SERVER_URL']!;
+  final String googleClientId = dotenv.env['GOOGLE_CLIENT_ID']!;
   final String loginPath = '/auth/login';
   final String googleRedirectPath = '/auth/oauth2/redirect/google';
   final String registerPath = '/auth/register';
@@ -26,7 +27,7 @@ class AuthService {
   Future<dynamic> googleLogin() async {
     try {
       GoogleSignInAccount? account = await GoogleSignIn(
-          clientId: "675364019815-7vod2r2kd696ca0v7mpun7cbbo8jc2ed.apps.googleusercontent.com",
+          clientId: googleClientId,
         scopes: <String> ["email"]
       ).signIn();
       saveAccessToken(await _redirect(account?.serverAuthCode));
