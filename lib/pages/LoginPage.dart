@@ -84,11 +84,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: ElevatedButton.icon(
                     onPressed: () {
                       authService.googleLogin()
-                          .then((value) => {
-                            print("Volvio $value")
-                            //Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false,)
-                          })
-                          .catchError((onError) => { print("Error $onError")/*_setError(true)*/});
+                          .then((value) => Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false,))
+                          .catchError((onError) => {_setError(true)});
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,

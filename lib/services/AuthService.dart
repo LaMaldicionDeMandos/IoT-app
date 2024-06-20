@@ -10,7 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthService {
   final String baseUrl = dotenv.env['SERVER_URL']!;
   final String loginPath = '/auth/login';
-  final String googleLoginPath = '/auth/login/google';
+  final String googleRedirectPath = '/auth/oauth2/redirect/google';
   final String registerPath = '/auth/register';
 
   Future<dynamic> login(username, password) async {
@@ -20,12 +20,7 @@ class AuthService {
       'username': username,
       'password': password
     }));
-    if (response.statusCode == 200) {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      await preferences.setString('accessToken', response.body);
-    } else {
-      throw Exception('Failed login.');
-    }
+    saveAccessToken(response);
   }
 
   Future<dynamic> googleLogin() async {
@@ -34,18 +29,10 @@ class AuthService {
           clientId: "675364019815-7vod2r2kd696ca0v7mpun7cbbo8jc2ed.apps.googleusercontent.com",
         scopes: <String> ["email"]
       ).signIn();
-      print(account?.email);
+      saveAccessToken(await _redirect(account?.serverAuthCode));
     } catch (error) {
       print(error);
     }
-    /*
-    if (await canLaunchUrl(Uri.parse(baseUrl + googleLoginPath))) {
-      await launchUrl(Uri.parse(baseUrl + googleLoginPath));
-    } else {
-      throw 'Could not launch ${baseUrl + googleLoginPath}';
-    }
-
- */
   }
 
   Future<dynamic> register(name, username, password) async {
@@ -63,15 +50,17 @@ class AuthService {
     }
   }
 
-  Future<void> _handleRedirect(Uri uri) async {
-    if (true /*uri.toString().startsWith(redirectUrl)*/) {
-      // Aquí puedes extraer los parámetros necesarios, por ejemplo, un token
-      final token = uri.queryParameters['token'];
-      if (token != null) {
-        print("success");
-      } else {
-        print("Claro pero yo necesito el toke, supongo que tengo que llamarlo");
-      }
+  Future<dynamic> _redirect(authCode) async {
+    String uri = '$baseUrl$googleRedirectPath?code=$authCode&scope=email%20profile%20openid%20https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/userinfo.email&authuser=0&prompt=consent';
+    return http.get(Uri.parse(uri));
+  }
+
+  void saveAccessToken(http.Response response) async {
+    if (response.statusCode == 200) {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.setString('accessToken', response.body);
+    } else {
+      throw Exception('Failed login.');
     }
   }
 }
