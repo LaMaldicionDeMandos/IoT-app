@@ -16,6 +16,11 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  RegExp passwordRegex = RegExp(
+  r'^(?=.*\d)[A-Za-z\d]{8,}$',
+    caseSensitive: false,
+  );
+
   TextEditingController nameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -45,6 +50,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool _hasError() {
     return errorMessage.isNotEmpty;
+  }
+
+  bool _validPassword(String password) {
+    return passwordRegex.hasMatch(password);
   }
 
   @override
@@ -96,19 +105,23 @@ class _RegisterPageState extends State<RegisterPage> {
                         String name = nameController.value.text;
                         String username = usernameController.value.text;
                         String password = passwordController.value.text;
-                        authService.register(name, username, password)
-                            .then((value) => Navigator.pushNamedAndRemoveUntil(context, '/register/code', (Route<dynamic> route) => false,))
-                            .catchError((error) => {
-                              if (error.message == 'user_already_exists')
-                                _setError("El usuario $username ya se encuentra registrado.", position: _ErrorPosition.EMAIL)
-                              else if (error.message == 'invalid email')
-                                _setError("El email registrado no es válido.", position: _ErrorPosition.EMAIL)
-                              else if (error.message == 'invalid password')
-                                  _setError("La contraseña es inválida.", position: _ErrorPosition.PASSWORD)
+                        if (_validPassword(password)) {
+                          authService.register(name, username, password)
+                              .then((value) => Navigator.pushNamedAndRemoveUntil(context, '/register/code', (Route<dynamic> route) => false,))
+                              .catchError((error) => {
+                            if (error.message == 'user_already_exists')
+                              _setError("El usuario $username ya se encuentra registrado.", position: _ErrorPosition.EMAIL)
+                            else if (error.message == 'invalid email')
+                              _setError("El email registrado no es válido.", position: _ErrorPosition.EMAIL)
+                            else if (error.message == 'invalid password')
+                                _setError("La contraseña es inválida.", position: _ErrorPosition.PASSWORD)
                               else
-                                _setError("No hemos podido registrarte 😢 por favor intena más tarde")
+                                _setError("No hemos podido registrarte 😢 por favor intenta \nmás tarde")
 
-                            });
+                          });
+                        } else {
+                          _setError("Revisa que la contraseña tenga al menos 8 caracteres\n y un dígito.", position: _ErrorPosition.PASSWORD);
+                        }
                       },)
                   ),
                   const Padding(padding: EdgeInsets.symmetric(horizontal: 32),
