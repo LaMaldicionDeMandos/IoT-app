@@ -8,7 +8,7 @@ class ErrorText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(label,
-        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.pink, fontSize: 12),
+        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.pink, fontSize: 10),
         textAlign: TextAlign.start);
   }
 }

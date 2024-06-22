@@ -20,7 +20,8 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   AuthService authService = AuthService();
-  bool hasError = false;
+  String errorMessage = '';
+  _ErrorPosition errorPosition = _ErrorPosition.DEFAULT;
 
   @override
   void dispose() {
@@ -31,10 +32,19 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  void _setError(bool e) {
+  void _clearError() {
+    _setError("");
+  }
+
+  void _setError(String message, {_ErrorPosition position = _ErrorPosition.DEFAULT}) {
     setState(() {
-      hasError = e;
+      errorMessage = message;
+      errorPosition = position;
     });
+  }
+
+  bool _hasError() {
+    return errorMessage.isNotEmpty;
   }
 
   @override
@@ -50,6 +60,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   const Padding(padding: EdgeInsets.symmetric(horizontal: 32, vertical: 56),
                     child: Text('Empecemos 👇', style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
                   ),
+                  if (_hasError() && errorPosition == _ErrorPosition.DEFAULT) Row(
+                      children: <Widget>[
+                        Padding(padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: ErrorText(errorMessage))]),
                   Padding(padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                       child: TextField(
                         style: const TextStyle(fontFamily: 'Roboto'),
@@ -57,10 +71,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: nameController,
                       )
                   ),
-                  if (hasError) const Row(
-                      children: <Widget>[
-                        Padding(padding: EdgeInsets.symmetric(horizontal: 40),
-                            child: ErrorText("* No hemos encontrado el email."))]),
                   Padding(padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                       child: TextField(
                         keyboardType: TextInputType.emailAddress,
@@ -69,18 +79,36 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: usernameController,
                       )
                   ),
+                  if (_hasError() && errorPosition == _ErrorPosition.EMAIL) Row(
+                      children: <Widget>[
+                        Padding(padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: ErrorText(errorMessage))]),
                   Padding(padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                       child: PasswordTextField(controller: passwordController)
                   ),
+                  if (_hasError() && errorPosition == _ErrorPosition.PASSWORD) Row(
+                      children: <Widget>[
+                        Padding(padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: ErrorText(errorMessage))]),
                   Padding(padding: const EdgeInsets.fromLTRB(32, 32, 32, 8),
                       child: PrimaryButton(label: 'Registrarme', onPressed: () {
-                        _setError(false);
+                        _clearError();
                         String name = nameController.value.text;
                         String username = usernameController.value.text;
                         String password = passwordController.value.text;
                         authService.register(name, username, password)
                             .then((value) => Navigator.pushNamedAndRemoveUntil(context, '/register/code', (Route<dynamic> route) => false,))
-                            .catchError((onError) => {_setError(true)});
+                            .catchError((error) => {
+                              if (error.message == 'user_already_exists')
+                                _setError("El usuario $username ya se encuentra registrado.", position: _ErrorPosition.EMAIL)
+                              else if (error.message == 'invalid email')
+                                _setError("El email registrado no es válido.", position: _ErrorPosition.EMAIL)
+                              else if (error.message == 'invalid password')
+                                  _setError("La contraseña es inválida.", position: _ErrorPosition.PASSWORD)
+                              else
+                                _setError("No hemos podido registrarte 😢 por favor intena más tarde")
+
+                            });
                       },)
                   ),
                   const Padding(padding: EdgeInsets.symmetric(horizontal: 32),
@@ -128,3 +156,5 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
+
+enum _ErrorPosition { DEFAULT, EMAIL, PASSWORD }

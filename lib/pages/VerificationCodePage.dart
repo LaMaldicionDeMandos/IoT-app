@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iot_app/components/Link.dart';
 import 'package:iot_app/components/SixDigitCode.dart';
+import 'package:iot_app/services/AuthService.dart';
 
 class VerificationCodePage extends StatefulWidget {
   const VerificationCodePage({super.key});
@@ -10,6 +11,8 @@ class VerificationCodePage extends StatefulWidget {
 }
 
 class _VerificationCodePageState extends State<VerificationCodePage> {
+
+  AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,12 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                     style: TextStyle(fontSize: 14, color: Colors.black54))
             ),
             Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
-              child: SixDigitCode(listener: (value) => print(value)),
+              child: SixDigitCode(listener: (code) => {
+                authService.sendValidationCode(code)
+                .then((isOk) => {
+                  if (isOk) Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false,)
+                })
+              }),
             ),
           ]
         ),
